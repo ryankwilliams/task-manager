@@ -7,5 +7,10 @@ class Task(BaseModel):
     status: str | None = None
 
 
+class TaskPatch(BaseModel):
+    name: str | None = None
+    status: str | None = None
+
+
 class TaskCreate(BaseModel):
     id: str

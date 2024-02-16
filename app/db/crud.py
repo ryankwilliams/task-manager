@@ -6,6 +6,7 @@ from sqlalchemy import desc
 from sqlalchemy.orm import Session
 
 from app.api.endpoints.types import Task
+from app.api.endpoints.types import TaskPatch
 from app.db.models.tasks import TasksModel
 
 
@@ -29,3 +30,13 @@ class TaskDB:
         row = self.db.query(TasksModel).filter(TasksModel.task_id == task_id).one()
         self.db.delete(row)
         self.db.commit()
+
+    def update_row(self, task_id: str, task: TaskPatch) -> Type[TasksModel] | None:
+        row = self.get_row(task_id=task_id)
+        if task.name:
+            row.name = task.name
+        if task.status:
+            row.status = task.status
+        self.db.flush()
+        self.db.commit()
+        return self.get_row(task_id=task_id)

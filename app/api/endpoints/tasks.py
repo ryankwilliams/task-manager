@@ -9,6 +9,7 @@ from sqlalchemy.orm import Session
 from app.api.common import get_db
 from app.api.endpoints.types import Task
 from app.api.endpoints.types import TaskCreate
+from app.api.endpoints.types import TaskPatch
 from app.db.crud import TaskDB
 
 router: APIRouter = APIRouter()
@@ -29,6 +30,17 @@ def list_tasks(db: Session = Depends(get_db)) -> List[Task]:
 def get_task(task_id: str, db: Session = Depends(get_db)) -> Task:
     task_db = TaskDB(db)
     row = task_db.get_row(task_id=task_id)
+    return Task(**row.__dict__)
+
+
+@router.put("/{task_id}")
+def update_task(
+    task_id: str,
+    task: TaskPatch,
+    db: Session = Depends(get_db),
+) -> Task:
+    task_db = TaskDB(db)
+    row = task_db.update_row(task_id=task_id, task=task)
     return Task(**row.__dict__)
 
 
