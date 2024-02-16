@@ -1,0 +1,26 @@
+version: '3'
+
+services:
+  app:
+    environment:
+      POSTGRESQL_DATABASE_HOST: db
+      POSTGRESQL_DATABASE: db
+      POSTGRESQL_USER: user
+      POSTGRESQL_PASSWORD: pass
+    build: .
+    restart: always
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+  db:
+    image:
+      registry.redhat.io/rhel8/postgresql-15:latest
+    restart: always
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRESQL_DATABASE_HOST: db
+      POSTGRESQL_DATABASE: db
+      POSTGRESQL_USER: user
+      POSTGRESQL_PASSWORD: pass

@@ -1,0 +1,36 @@
+[project]
+name = "todo-app"
+version = "0.0.1"
+description = "A todo web application"
+readme = "README.md"
+requires-python = ">=3.11"
+
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only"
+]
+
+dependencies = [
+    "fastapi",
+    "psycopg2-binary",
+    "sqlalchemy",
+    "uvicorn"
+]
+
+[project.optional-dependencies]
+dev = [
+    "black",
+    "pre-commit"
+]
+
+[tool.setuptools.packages.find]
+where = ["."]
+
+
+[tool.black]
+line-length = 100
+target_version = ["py311", "py312"]
+
+[build-system]
+requires = ["setuptools>=43.0.0", "wheel"]
+build-backend = "setuptools.build_meta"
