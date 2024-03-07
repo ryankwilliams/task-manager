@@ -1,0 +1,22 @@
+name: Linting
+
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+
+jobs:
+  pre-commit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Install package dependencies
+        run: pip install '.[dev]'
+
+      - name: Run pre-commit
+        run: pre-commit run --all-files --show-diff-on-failure
