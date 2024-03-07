@@ -1,7 +1,7 @@
 [project]
-name = "todo-app"
+name = "task-manager"
 version = "0.0.1"
-description = "A todo web application"
+description = "A task manager web application"
 readme = "README.md"
 requires-python = ">=3.11"
 
@@ -30,6 +30,9 @@ where = ["."]
 [tool.black]
 line-length = 100
 target_version = ["py311", "py312"]
+
+[tool.mypy]
+disable_error_code = ["union-attr"]
 
 [build-system]
 requires = ["setuptools>=43.0.0", "wheel"]

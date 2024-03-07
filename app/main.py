@@ -7,7 +7,7 @@ from app.settings import settings
 
 app: FastAPI = FastAPI(
     title="Task Manager",
-    description="Manages tasks to be worked on",
+    description="Application managing tasks.",
     openapi_url=f"{settings.api_path_str}/openapi.json",
 )
 
@@ -25,6 +25,7 @@ app.include_router(api_router, prefix=settings.api_path_str)
 )
 async def home() -> str:
     """Redirect requests to host to docs endpoint.
+
     :return: the redirected URL
     """
     return f"{settings.host_url}/docs"

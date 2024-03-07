@@ -5,3 +5,8 @@
 # Python
 .venv
 *.py[cod]
+
+# Python packaging
+*.egg-info
+build/*
+dist/*
