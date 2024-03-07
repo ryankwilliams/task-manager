@@ -6,10 +6,13 @@ services:
       - ./docker-compose-vars.env
 #    image:
 #      quay.io/rywillia/task-manager:latest
-    build: .
+    build:
+      context: .
+      args:
+        - APP_PORT=${APP_PORT}
     restart: always
     ports:
-      - "8080:8080"
+      - "${APP_PORT}:${APP_PORT}"
     depends_on:
       - db
   db:
