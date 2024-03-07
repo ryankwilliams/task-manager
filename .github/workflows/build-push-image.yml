@@ -25,8 +25,8 @@ jobs:
       - name: Push image to quay.io
         uses: redhat-actions/push-to-registry@v2
         with:
-          image: "${{ steps.build-image.outputs.image }}"
-          tags: "${{ steps.build-image.outputs.tags }}"
+          image: ${{ steps.build-image.outputs.image }}
+          tags: ${{ steps.build-image.outputs.tags }}
           registry: quay.io/rywillia
           username: rywillia
-          password: "${{ secrets.REGISTRY_PASSWORD }}"
+          password: ${{ secrets.REGISTRY_PASSWORD }}
