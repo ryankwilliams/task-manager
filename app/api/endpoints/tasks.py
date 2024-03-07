@@ -9,6 +9,7 @@ from sqlalchemy.orm import Session
 from app.api.common import get_db
 from app.api.endpoints.types import Task
 from app.api.endpoints.types import TaskCreate
+from app.api.endpoints.types import TaskCreateResponse
 from app.api.endpoints.types import TaskPatch
 from app.db.crud import TaskDB
 
@@ -46,13 +47,14 @@ def update_task(
 
 @router.post("/")
 async def create(
-    task: Task,
+    task: TaskCreate,
     background_tasks: BackgroundTasks,
     db: Session = Depends(get_db),
-) -> TaskCreate:
+) -> TaskCreateResponse:
+    task = Task(**task.__dict__)
     task.task_id = uuid.uuid4().__str__()
     background_tasks.add_task(create_task, task=task, db=db)
-    return TaskCreate(id=task.task_id)
+    return TaskCreateResponse(id=task.task_id)
 
 
 @router.delete("/{task_id}")
@@ -66,7 +68,7 @@ def delete(
 
 def create_task(task: Task, db: Session) -> None:
     tasks_db = TaskDB(db)
-    if task.status is None:
+    if task.status is None or task.status == "":
         task.status = "todo"
     tasks_db.create_row(task=task)
 
