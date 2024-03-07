@@ -2,11 +2,10 @@ version: '3'
 
 services:
   app:
-    environment:
-      POSTGRESQL_DATABASE_HOST: db
-      POSTGRESQL_DATABASE: db
-      POSTGRESQL_USER: user
-      POSTGRESQL_PASSWORD: pass
+    env_file:
+      - ./docker-compose-vars.env
+#    image:
+#      quay.io/rywillia/task-manager:latest
     build: .
     restart: always
     ports:
@@ -15,12 +14,9 @@ services:
       - db
   db:
     image:
-      quay.io/sclorg/postgresql-15-c9s
+      quay.io/sclorg/postgresql-15-c9s:latest
     restart: always
     ports:
       - "5432:5432"
-    environment:
-      POSTGRESQL_DATABASE_HOST: db
-      POSTGRESQL_DATABASE: db
-      POSTGRESQL_USER: user
-      POSTGRESQL_PASSWORD: pass
+    env_file:
+      - ./docker-compose-vars.env
