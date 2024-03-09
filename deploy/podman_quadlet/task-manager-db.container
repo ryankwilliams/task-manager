@@ -1,0 +1,9 @@
+[Install]
+WantedBy=default.target
+
+[Container]
+Image=quay.io/sclorg/postgresql-15-c9s:latest
+ContainerName=task-manager-db
+Network=task-manager.network
+PublishPort=5432:5432
+Environment="POSTGRESQL_DATABASE_HOST=0.0.0.0" "POSTGRESQL_DATABASE=db" "POSTGRESQL_USER=user" "POSTGRESQL_PASSWORD=pass"

@@ -1,0 +1,14 @@
+[Install]
+WantedBy=default.target
+
+[Unit]
+Requires=task-manager-db.service
+After=task-manager-db.service
+
+[Container]
+Image=quay.io/rywillia/task-manager:latest
+ContainerName=task-manager-app
+Network=task-manager.network
+PublishPort=9090:9090
+Exec=uvicorn app.main:app --host 0.0.0.0 --port 9090 --workers 1
+Environment="POSTGRESQL_DATABASE_HOST=task-manager-db" "POSTGRESQL_DATABASE=db" "POSTGRESQL_USER=user" "POSTGRESQL_PASSWORD=pass"
