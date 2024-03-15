@@ -11,3 +11,4 @@ class TasksModel(Base):  # type: ignore
     task_id = Column(String)
     name = Column(String)
     status = Column(String)
+    labels = Column(String)

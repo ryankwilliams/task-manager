@@ -15,7 +15,9 @@ class TaskDB:
     db: Session
 
     def create_row(self, task: Task) -> None:
-        row = TasksModel(name=task.name, status=task.status, task_id=task.task_id)
+        row = TasksModel(
+            name=task.name, status=task.status, task_id=task.task_id, labels=task.labels
+        )
         self.db.add(row)
         self.db.commit()
         self.db.refresh(row)
@@ -37,6 +39,8 @@ class TaskDB:
             row.name = task.name
         if task.status:
             row.status = task.status
+        if task.labels:
+            row.labels = ",".join(task.labels)
         self.db.flush()
         self.db.commit()
         return self.get_row(task_id=task_id)
