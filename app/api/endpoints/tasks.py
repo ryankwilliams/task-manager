@@ -47,12 +47,15 @@ def update_task(
 
 @router.post("/")
 async def create(
-    task: TaskCreate,
+    task_create: TaskCreate,
     background_tasks: BackgroundTasks,
     db: Session = Depends(get_db),
 ) -> TaskCreateResponse:
-    task = Task(**task.__dict__)
+    labels = task_create.__dict__.pop("labels")
+    task = Task(**task_create.__dict__)
     task.task_id = uuid.uuid4().__str__()
+    if labels:
+        task.labels = ",".join(labels)
     background_tasks.add_task(create_task, task=task, db=db)
     return TaskCreateResponse(id=task.task_id)
 
