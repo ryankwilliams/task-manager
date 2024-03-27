@@ -7,7 +7,9 @@ from sqlalchemy.orm import Session
 
 from app.api.endpoints.types import Task
 from app.api.endpoints.types import TaskPatch
+from app.api.endpoints.types import User
 from app.db.models.tasks import TasksModel
+from app.db.models.users import UsersModel
 
 
 @dataclasses.dataclass
@@ -44,3 +46,22 @@ class TaskDB:
         self.db.flush()
         self.db.commit()
         return self.get_row(task_id=task_id)
+
+
+@dataclasses.dataclass
+class UsersDB:
+    db: Session
+
+    def create_user(self, user: User) -> None:
+        user = UsersModel(username=user.username, password=user.password, user_id=user.user_id)
+        self.db.add(user)
+        self.db.commit()
+        self.db.refresh(user)
+
+    def get_all_users(self) -> List[Type[UsersModel]] | List[UsersModel]:
+        return self.db.query(UsersModel).order_by(desc(UsersModel.id)).all()
+
+    def delete_user(self, user_id: str) -> None:
+        row = self.db.query(UsersModel).filter(UsersModel.user_id == user_id).one()
+        self.db.delete(row)
+        self.db.commit()

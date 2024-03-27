@@ -1,9 +1,15 @@
+import secrets
 import uuid
+from typing import Annotated
 from typing import List
 
 from fastapi import APIRouter
 from fastapi import BackgroundTasks
 from fastapi import Depends
+from fastapi import HTTPException
+from fastapi import status
+from fastapi.security import HTTPBasic
+from fastapi.security import HTTPBasicCredentials
 from sqlalchemy.orm import Session
 
 from app.api.common import get_db
@@ -15,9 +21,32 @@ from app.db.crud import TaskDB
 
 router: APIRouter = APIRouter()
 
+security = HTTPBasic()
+
+
+def get_current_username(
+    credentials: Annotated[HTTPBasicCredentials, Depends(security)],
+):
+    current_username_bytes = credentials.username.encode("utf8")
+    correct_username_bytes = b"admin"
+    is_correct_username = secrets.compare_digest(current_username_bytes, correct_username_bytes)
+    current_password_bytes = credentials.password.encode("utf8")
+    correct_password_bytes = b"password"
+    is_correct_password = secrets.compare_digest(current_password_bytes, correct_password_bytes)
+    if not (is_correct_username and is_correct_password):
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Incorrect username or password",
+            headers={"WWW-Authenticate": "Basic"},
+        )
+    return credentials.username
+
 
 @router.get("/")
-def list_tasks(db: Session = Depends(get_db)) -> List[Task]:
+def list_tasks(
+    credentials: Annotated[HTTPBasicCredentials, Depends(get_current_username)],
+    db: Session = Depends(get_db),
+) -> List[Task]:
     task_db = TaskDB(db)
     rows = task_db.get_all_rows()
 

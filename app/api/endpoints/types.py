@@ -23,3 +23,18 @@ class TaskPatch(BaseModel):
 
 class TaskCreateResponse(BaseModel):
     id: str
+
+
+class User(BaseModel):
+    user_id: str | None = None
+    username: str
+    password: str
+
+
+class UserCreate(BaseModel):
+    username: str
+    password: str
+
+
+class UserCreateResponse(BaseModel):
+    id: str
